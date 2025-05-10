@@ -25,7 +25,7 @@ const IssueDetailPage = async (props: { params: params }) => {
   }
 
   return (
-    <div className="prose">
+    <div className="prose max-w-xl">
       <Heading>{issue.title}</Heading>
       <Flex gap="2" my="2">
         <IssueStatusBadge status={issue.status} />
