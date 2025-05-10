@@ -27,6 +27,18 @@ const NewIssuePage = () => {
   const [error, setError] = useState<string>("");
   const [isSubmitting, setSubmitting] = useState(false);
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      setSubmitting(true);
+      await axios.post("/api/issues", data), router.push("/issues");
+    } catch (error) {
+      setSubmitting(false);
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+    }
+  });
+
   return (
     <div className="max-w-2xl">
       {error && (
@@ -35,20 +47,7 @@ const NewIssuePage = () => {
         </Callout.Root>
       )}
 
-      <form
-        className="space-y-5"
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setSubmitting(true);
-            await axios.post("/api/issues", data), router.push("/issues");
-          } catch (error) {
-            setSubmitting(false);
-            if (error instanceof Error) {
-              setError(error.message);
-            }
-          }
-        })}
-      >
+      <form className="space-y-5" onSubmit={onSubmit}>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <TextField.Root
           variant="soft"
