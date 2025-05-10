@@ -1,5 +1,5 @@
 "use client";
-import { Button, Callout, TextField, Text } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchemas";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -24,6 +25,7 @@ const NewIssuePage = () => {
   });
   const router = useRouter();
   const [error, setError] = useState<string>("");
+  const [isSubmitting, setSubmitting] = useState(false);
 
   return (
     <div className="max-w-2xl">
@@ -37,8 +39,10 @@ const NewIssuePage = () => {
         className="space-y-5"
         onSubmit={handleSubmit(async (data) => {
           try {
+            setSubmitting(true);
             await axios.post("/api/issues", data), router.push("/issues");
           } catch (error) {
+            setSubmitting(false);
             if (error instanceof Error) {
               setError(error.message);
             }
@@ -60,7 +64,9 @@ const NewIssuePage = () => {
             <SimpleMDE placeholder="Description..." {...field} />
           )}
         />
-        <Button>Create new Issue</Button>
+        <Button disabled={isSubmitting}>
+          Create new Issue {isSubmitting && <Spinner />}{" "}
+        </Button>
       </form>
     </div>
   );
