@@ -1,12 +1,3 @@
-import { Skeleton } from "@/app/components";
+import IssueFormSkeleton from "../_components/IssueFormSkeleton";
 
-const LoadingNewIssue = () => {
-  return (
-    <div className="max-w-xl">
-      <Skeleton />
-      <Skeleton height={"5rem"} />
-    </div>
-  );
-};
-
-export default LoadingNewIssue;
+export default IssueFormSkeleton;

@@ -1,7 +1,20 @@
-import React from "react";
-import IssueForm from "../../_components/IssueForm";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import IssueFormSkeleton from "../../_components/IssueFormSkeleton";
+
+// Inline Client Component
+const ClientWrapper = ({ issue }: { issue: any }) => {
+  "use client";
+
+  // Move the dynamic import here
+  const dynamic = require("next/dynamic").default;
+  const IssueForm = dynamic(() => import("../../_components/IssueForm"), {
+    ssr: false,
+    loading: () => <IssueFormSkeleton />,
+  });
+
+  return <IssueForm issue={issue} />;
+};
 
 type params = Promise<{ id: string }>;
 
@@ -10,7 +23,7 @@ const IssueEditPage = async (props: { params: params }) => {
 
   const issue = await prisma.issue.findUnique({
     where: {
-      id: parseInt(id),
+      id: parseInt(id, 10),
     },
   });
 
@@ -18,7 +31,7 @@ const IssueEditPage = async (props: { params: params }) => {
     return notFound();
   }
 
-  return <IssueForm issue={issue} />;
+  return <ClientWrapper issue={issue} />;
 };
 
 export default IssueEditPage;

@@ -1,7 +1,5 @@
 "use client";
-import { Button } from "@radix-ui/themes";
 import Link from "next/link";
-import React from "react";
 
 const EditIssueButton = ({ id }: { id: number }) => {
   return (
