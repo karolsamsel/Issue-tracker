@@ -10,8 +10,17 @@ const DeleteIssueButton = ({ id }: { id: number }) => {
   const [error, setError] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
 
-  const simulateDelay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const deleteIssue = async () => {
+    try {
+      setDeleting(true);
+      await axios.delete(`/api/issues/${id}`);
+      router.push("/issues");
+      router.refresh();
+    } catch (error) {
+      setDeleting(false);
+      setError(true);
+    }
+  };
 
   return (
     <>
@@ -37,18 +46,7 @@ const DeleteIssueButton = ({ id }: { id: number }) => {
               <Button
                 className="!cursor-pointer"
                 color="red"
-                onClick={() => {
-                  try {
-                    setDeleting(true);
-                    simulateDelay(2000);
-                    axios.delete(`/api/issues/${id}`);
-                    router.push("/issues");
-                    router.refresh();
-                  } catch (error) {
-                    setDeleting(false);
-                    setError(true);
-                  }
-                }}
+                onClick={deleteIssue}
               >
                 Delete Issue
               </Button>
