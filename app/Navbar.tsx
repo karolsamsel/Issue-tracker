@@ -4,9 +4,11 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { FaBug } from "react-icons/fa6";
 import classNames from "classnames";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const pathName = usePathname();
+  const { status, data } = useSession();
 
   const links = [
     { label: "Dashboard", href: "/" },
@@ -32,6 +34,12 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
+      {status === "authenticated" && (
+        <Link href={"/api/auth/signout"}>Log out</Link>
+      )}
+      {status === "unauthenticated" && (
+        <Link href={"/api/auth/signin"}>Log in</Link>
+      )}
     </nav>
   );
 };

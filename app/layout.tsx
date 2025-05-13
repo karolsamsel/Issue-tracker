@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
+import SessionProviderWrapper from "./auth/SessionProviderWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
         <Theme accentColor="violet">
-          <Navbar />
+          <SessionProviderWrapper>
+            <Navbar />
+          </SessionProviderWrapper>
           <main className="p-5">
             <Container>{children}</Container>
           </main>
