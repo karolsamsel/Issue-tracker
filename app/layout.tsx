@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import SessionProviderWrapper from "./auth/SessionProviderWrapper";
+import QueryClientProvider from "./QueryClientProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,14 +25,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <Theme accentColor="violet">
-          <SessionProviderWrapper>
-            <Navbar />
-          </SessionProviderWrapper>
-          <main className="p-5">
-            <Container>{children}</Container>
-          </main>
-        </Theme>
+        <QueryClientProvider>
+          <Theme accentColor="violet">
+            <SessionProviderWrapper>
+              <Navbar />
+            </SessionProviderWrapper>
+            <main className="p-5">
+              <Container>{children}</Container>
+            </main>
+          </Theme>
+        </QueryClientProvider>
       </body>
     </html>
   );
