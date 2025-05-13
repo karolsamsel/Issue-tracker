@@ -5,6 +5,7 @@ import React from "react";
 import { FaBug } from "react-icons/fa6";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "@/app/components";
 import {
   Avatar,
   Box,
@@ -33,6 +34,11 @@ const Navbar = () => {
 const NavBarDropdownMenu = () => {
   const { status, data } = useSession();
 
+  if (status === "loading") return <Skeleton width={"3rem"} />;
+
+  if (status === "unauthenticated")
+    return <Link href={"/api/auth/signin"}>Log in</Link>;
+
   return (
     <Box>
       {status === "authenticated" && (
@@ -55,9 +61,6 @@ const NavBarDropdownMenu = () => {
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-      )}
-      {status === "unauthenticated" && (
-        <Link href={"/api/auth/signin"}>Log in</Link>
       )}
     </Box>
   );
