@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 import DeleteIssueButton from "./DeleteIssueButton";
+import { auth } from "@/auth";
 
 type params = Promise<{ id: string }>;
 
 const IssueDetailPage = async (props: { params: params }) => {
   const id = (await props.params).id;
   const idParsed = parseInt(id);
+  const session = await auth();
 
   if (!/^\d+$/.test(id)) {
     return notFound();
@@ -30,10 +32,12 @@ const IssueDetailPage = async (props: { params: params }) => {
       <Box className="md:col-span-4">
         <IssueDetails issue={issue} />
       </Box>
-      <Flex direction={"column"} gap={"3"}>
-        <EditIssueButton id={idParsed} />
-        <DeleteIssueButton id={idParsed} />
-      </Flex>
+      {session && (
+        <Flex direction={"column"} gap={"3"}>
+          <EditIssueButton id={idParsed} />
+          <DeleteIssueButton id={idParsed} />
+        </Flex>
+      )}
     </Grid>
   );
 };
