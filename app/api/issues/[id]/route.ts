@@ -6,11 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 type params = Promise<{ id: string }>;
 
 export async function PATCH(reqeust: NextRequest, props: { params: params }) {
-  // const session = await auth();
+  const session = await auth();
 
-  // if (!session) {
-  //   return NextResponse.json({}, { status: 401 });
-  // }
+  if (!session) {
+    return NextResponse.json({}, { status: 401 });
+  }
   const id = (await props.params).id;
   const body = await reqeust.json();
   const validation = patchIssueSchema.safeParse(body);
