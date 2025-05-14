@@ -1,4 +1,4 @@
-import { issueSchema } from "@/app/validationSchemas";
+import { issueSchema, patchIssueSchema } from "@/app/validationSchemas";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
@@ -6,17 +6,30 @@ import { NextRequest, NextResponse } from "next/server";
 type params = Promise<{ id: string }>;
 
 export async function PATCH(reqeust: NextRequest, props: { params: params }) {
-  const session = await auth();
+  // const session = await auth();
 
-  if (!session) {
-    return NextResponse.json({}, { status: 401 });
-  }
+  // if (!session) {
+  //   return NextResponse.json({}, { status: 401 });
+  // }
   const id = (await props.params).id;
   const body = await reqeust.json();
-  const validation = issueSchema.safeParse(body);
+  const validation = patchIssueSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(validation.error.errors, { status: 400 });
+  }
+
+  const { assignedToUserId, title, description } = body;
+
+  if (assignedToUserId) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: assignedToUserId,
+      },
+    });
+    if (!user) {
+      return NextResponse.json({ error: "Invalid user" }, { status: 400 });
+    }
   }
 
   const issue = await prisma.issue.findUnique({
@@ -34,8 +47,9 @@ export async function PATCH(reqeust: NextRequest, props: { params: params }) {
       id: parseInt(id),
     },
     data: {
-      title: body.title,
-      description: body.description,
+      title,
+      description,
+      assignedToUserId,
     },
   });
 
