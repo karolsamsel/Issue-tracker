@@ -6,8 +6,13 @@ import IssueDetails from "./IssueDetails";
 import DeleteIssueButton from "./DeleteIssueButton";
 import { auth } from "@/auth";
 import AssigneeSelect from "./AssigneeSelect";
+import { cache } from "react";
 
 type params = Promise<{ id: string }>;
+
+const fetchIssue = cache((issueId: number) =>
+  prisma.issue.findUnique({ where: { id: issueId } })
+);
 
 const IssueDetailPage = async (props: { params: params }) => {
   const id = (await props.params).id;
@@ -18,11 +23,7 @@ const IssueDetailPage = async (props: { params: params }) => {
     return notFound();
   }
 
-  const issue = await prisma.issue.findUnique({
-    where: {
-      id: idParsed,
-    },
-  });
+  const issue = await fetchIssue(idParsed);
 
   if (!issue) {
     return notFound();
@@ -47,11 +48,7 @@ const IssueDetailPage = async (props: { params: params }) => {
 export async function generateMetadata(props: { params: params }) {
   const params = await props.params;
 
-  const issue = await prisma.issue.findUnique({
-    where: {
-      id: parseInt(params.id),
-    },
-  });
+  const issue = await fetchIssue(parseInt(params.id));
 
   return {
     title: issue?.title,

@@ -1,7 +1,7 @@
-import { IssueStatusBadge } from "@/app/components";
+import { IssueStatusBadge, Link } from "@/app/components";
 import { Issue, Status } from "@prisma/client";
 import { Table } from "@radix-ui/themes";
-import { default as Link, default as NextLink } from "next/link";
+import NextLink from "next/link";
 import { columns } from "./page";
 
 interface Props {
