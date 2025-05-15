@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { Issue, Status } from "@prisma/client";
 import IssuesActions from "./IssuesActions";
 import IssuesTable from "./IssuesTable";
+import { Metadata } from "next";
 
 type searchParams = Promise<{
   status: Status;
@@ -53,6 +54,11 @@ const IssuesPage = async (props: { searchParams: searchParams }) => {
 
 // to force dynamic loading of a page
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - Issue List",
+  description: "View all project issues",
+};
 
 export default IssuesPage;
 

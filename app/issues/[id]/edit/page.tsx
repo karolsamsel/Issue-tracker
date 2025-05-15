@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import IssueFormSkeleton from "../../_components/IssueFormSkeleton";
+import { Metadata } from "next";
 
 // Inline Client Component
 const ClientWrapper = ({ issue }: { issue: any }) => {
@@ -33,5 +34,20 @@ const IssueEditPage = async (props: { params: params }) => {
 
   return <ClientWrapper issue={issue} />;
 };
+
+export async function generateMetadata(props: { params: params }) {
+  const params = await props.params;
+
+  const issue = await prisma.issue.findUnique({
+    where: {
+      id: parseInt(params.id),
+    },
+  });
+
+  return {
+    title: `Edit an issue: ${issue?.title}`,
+    description: `Edit issue ${issue?.id}`,
+  };
+}
 
 export default IssueEditPage;
