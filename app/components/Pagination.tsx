@@ -1,5 +1,6 @@
 "use client";
 import { Button, Flex, Text } from "@radix-ui/themes";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -9,9 +10,18 @@ interface Props {
 }
 
 const Pagination = ({ currentPage, itemCount, pageSize }: Props) => {
-  const pageCount = itemCount / pageSize;
+  const pageCount = Math.ceil(itemCount / pageSize);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   if (pageCount <= 1) return null;
+
+  const changePage = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    router.push("?" + params.toString());
+  };
 
   return (
     <Flex align={"center"} gap={"2"}>
@@ -23,6 +33,7 @@ const Pagination = ({ currentPage, itemCount, pageSize }: Props) => {
         variant="soft"
         disabled={currentPage === 1}
         className="!cursor-pointer"
+        onClick={() => changePage(1)}
       >
         <svg
           width="15"
@@ -44,6 +55,7 @@ const Pagination = ({ currentPage, itemCount, pageSize }: Props) => {
         variant="soft"
         disabled={currentPage === 1}
         className="!cursor-pointer"
+        onClick={() => changePage(currentPage - 1)}
       >
         <svg
           width="15"
@@ -65,6 +77,7 @@ const Pagination = ({ currentPage, itemCount, pageSize }: Props) => {
         variant="soft"
         disabled={currentPage === pageCount}
         className="!cursor-pointer"
+        onClick={() => changePage(currentPage + 1)}
       >
         <svg
           width="15"
@@ -86,6 +99,7 @@ const Pagination = ({ currentPage, itemCount, pageSize }: Props) => {
         variant="soft"
         disabled={currentPage === pageCount}
         className="!cursor-pointer"
+        onClick={() => changePage(pageCount)}
       >
         <svg
           width="15"
