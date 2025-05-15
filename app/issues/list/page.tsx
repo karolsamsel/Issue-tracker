@@ -4,6 +4,7 @@ import { Issue, Status } from "@prisma/client";
 import IssuesActions from "./IssuesActions";
 import IssuesTable from "./IssuesTable";
 import { Metadata } from "next";
+import { columns } from "./Columns";
 
 type searchParams = Promise<{
   status: Status;
@@ -61,17 +62,3 @@ export const metadata: Metadata = {
 };
 
 export default IssuesPage;
-
-export const columns: {
-  label: string;
-  value: keyof Issue;
-  className?: string;
-}[] = [
-  { label: "Title", value: "title" },
-  { label: "Status", value: "status", className: "hidden md:table-cell" },
-  {
-    label: "Created At",
-    value: "createdAt",
-    className: "hidden md:table-cell",
-  },
-];
