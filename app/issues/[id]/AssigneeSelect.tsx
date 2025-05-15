@@ -19,7 +19,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
         assignedToUserId:
           (selectedValue === "unassigned" ? null : selectedValue) || null,
       })
-      .catch((error) => {
+      .catch(() => {
         toast("Unabled to assign a user");
       });
   };

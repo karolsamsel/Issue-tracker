@@ -45,7 +45,7 @@ const NavBarDropdownMenu = () => {
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Avatar
-              src={data.user?.image!}
+              src={data.user?.image! || "?"}
               fallback="?"
               size={"2"}
               radius="full"

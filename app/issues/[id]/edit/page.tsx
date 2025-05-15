@@ -1,11 +1,11 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import IssueFormSkeleton from "../../_components/IssueFormSkeleton";
-import { Metadata } from "next";
 import { cache } from "react";
+import { Issue } from "@prisma/client";
 
 // Inline Client Component
-const ClientWrapper = ({ issue }: { issue: any }) => {
+const ClientWrapper = ({ issue }: { issue: Issue }) => {
   "use client";
 
   // Move the dynamic import here
